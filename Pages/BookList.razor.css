@@ -1,0 +1,44 @@
+/* Custom CSS for Book List */
+
+.book-list-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.book-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book-list-table th {
+    background-color: #007bff;
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+}
+
+.book-list-table th, .book-list-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+}
+
+.book-list-table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.book-list-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.book-list-button:hover {
+    background-color: #0056b3;
+}

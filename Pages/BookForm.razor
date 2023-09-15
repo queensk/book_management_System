@@ -1,0 +1,74 @@
+<EditForm Model="@book" OnValidSubmit="@HandleSubmit" class="form-container">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="firstname">Book Title</label>
+        <br />
+        <InputText id="firstname" class="form-controle" @bind-Value="@book.Title"/>
+    </div>
+    <div class="form-group mt-3">
+        <label for="bookDescription">Book Description</label>
+        <br />
+        <InputText id="bookDescription" class="form-controle" @bind-Value="@book.Description" />
+        <ValidationMessage For="@(()=> book.Description)" />
+    </div>
+    @{
+        var i = 1;
+    }
+    @foreach (var auther in book.Authors)
+    {
+        i++;
+        auther.Id = i;
+        <div class="form-group mt-3">
+            <label for="bookAuthers">Book Description</label>
+            <InputText id="bookAuthers" @bind-Value="@auther.Name" class="form-control" @onfocusin="addInput" />
+            <button class="btn btn-link" type="button" @onclick="@(()=>book.Authors.Remove(auther))" >
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle-fill text-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                </svg>
+            </button>
+            <ValidationMessage For="@(()=>auther.Name)" />
+        </div>
+        <button type="button"  onclick="@(()=>book.Authors.Add(new Author()))" class=" mt-4 btn btn-primary">Add Auther </button>
+    }
+
+    <button type="submit" class="btn mt-3 btn-primary">@GetButtonLabel()</button>
+</EditForm>
+
+@code{
+    [Parameter]
+    public Book book { get; set; } = new Book();
+    [Parameter]
+    public EventCallback<Book> OnSubmit { get; set; }
+    [Parameter]
+    public EventCallback<Book> OnDelete { get; set; }
+    [Parameter]
+    public bool IsEdit {get; set;}
+
+    private async Task HandleSubmit()
+    {
+        await OnSubmit.InvokeAsync(book);
+        Console.WriteLine(book.Title);
+        book = new Book();
+    }
+
+    private async Task HandleDelete()
+    {
+        await OnDelete.InvokeAsync(book);
+        book = new Book();
+    }
+
+    public void SetBook(Book newbook)
+    {
+        book = newbook;
+    }
+
+    private string GetButtonLabel()
+    {
+        return IsEdit ? "Update" : "Save";
+    }
+
+    private void addInput()
+    {
+        book.Authors.Add(new Author());
+    }
+}

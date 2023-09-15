@@ -1,0 +1,48 @@
+<h3 class="book-list-header">Book List</h3>
+<table class="book-list-table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Authors</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in books)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Description</td>
+                <td>
+                @foreach (var auther in book.Authors)
+                {
+                    <p>@auther</p>
+                }
+                </td>
+                <td>
+                    <button class="book-list-button" @onclick="() => EditBook(book)">Edit</button>
+                    <button class="book-list-button" @onclick="()=> HandleDelete(book)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public List<Book>? books { get; set; }
+    [Parameter]
+    public EventCallback<Book> OnSelect { get; set; }
+    [Parameter]
+    public EventCallback<Book> OnDelete { get; set; }
+
+    public void EditBook(Book book)
+    {
+        OnSelect.InvokeAsync(book);
+    }
+    private async Task HandleDelete(Book book)
+    {
+        await OnDelete.InvokeAsync(book);
+    }
+}

@@ -1,0 +1,53 @@
+﻿@page "/"
+<div class="book-app-container">
+    <h3 class="book-app-header">Book Managemt</h3>
+    <div class="book-list">
+        <BookList books="books" OnSelect="Selectbook" OnDelete="HandleFormDelete" />
+    </div>
+    <div class="book-form">
+        <BookForm @ref="todoForm" OnSubmit="HandleFormSubmit" OnDelete="HandleFormDelete" IsEdit="IsEdit" />
+    </div>
+</div>
+
+@code {
+    [Inject]
+    private BookService BookService { get; set; }
+
+    private List<Book> books;
+
+    private Book selectedbook = null;
+    private BookForm todoForm;
+    private bool IsEdit {get; set;}= false;
+    
+    protected override void OnInitialized()
+    {
+        books = BookService.GetAll();
+    }
+
+    private void Selectbook(Book book)
+    {
+        selectedbook = book;
+        IsEdit = !IsEdit;
+        todoForm.SetBook(book);
+    }
+
+    private void HandleFormSubmit(Book book)
+    {
+        if (!IsEdit)
+        {
+            BookService.AddBook(book);
+        }
+        else
+        {
+            BookService.UpdateBook(book);
+            IsEdit = !IsEdit;
+        }
+    }
+
+    private void HandleFormDelete(Book book)
+    {
+        BookService.DeleteBook(book);
+        IsEdit = false;
+    }
+}
+
